@@ -2,26 +2,24 @@ package app;
 
 public class Calculator {
 
-	private char but;
 	private double a;
 	private double b;
 	private String current;
 	private String strA;
-	private String strB;
 	private double result;
 	private String disp;
 	private char sign;
+	private boolean percent;
 
 	public Calculator() {
-		this.but = ' ';
 		this.a = 0;
 		this.b = 0;
 		this.current = "";
-		this.disp = "";
 		this.strA = "";
-		this.strB = "";
 		this.result = 0;
+		this.disp = "";
 		this.sign = ' ';
+		this.percent = false;
 	};
 
 	public void click(String str) {
@@ -34,38 +32,73 @@ public class Calculator {
 				current += c;
 				disp = current;
 			}
-		} else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '=' || c == '%' || c == 'n') {
+		} else if (c == '+' || c == '-' || c == '*' || c == '/' || c == 'n' || c == '%') {
+			if (current.length() == 0) current = "0";
+			if (sign == ' ') {
+				a = Double.parseDouble(current);
+			} else {
+				calculate();
+			}
 			sign = c;
-			a = a + Double.parseDouble(current);
+			if (c == 'n' || c == '%') {
+				switch (sign) {
+				case 'n':
+					a = a * (-1);
+					break;
+				case '%':
+					a = a * 100;
+					percent = true;
+					break;
+				}
+			}
 			current = "";
 			disp = "" + a;
 		} else if (c == '=') {
-			b = Double.parseDouble(current);
-			switch (sign) {
-			case '+':
-				result = a + b;
-				String temp = "" + result;
-				reset();
-				a = Double.parseDouble(temp);
-				disp = temp;
+			if (current.length() == 0) current = "0";
+			calculate();
+			double temp = a;
+			boolean percentTemp = percent;
+			reset();
+			a = temp;
+			if (percentTemp) {
+				a = a / 100;
 			}
+			disp = "" + a;
+		}
+	}
+
+	private void calculate() {
+		switch (sign) {
+		case '+':
+			a = a + Double.parseDouble(current);
+			break;
+		case '-':
+			a = a - Double.parseDouble(current);
+			break;
+		case '*':
+			a = a + Double.parseDouble(current);
+			break;
+		case '/':
+			a = a / Double.parseDouble(current);
+			break;
 		}
 	}
 
 	public String display() {
+		if (percent)
+			disp += "%";
 		return this.disp;
 	}
-	
+
 	public void reset() {
-		this.but = ' ';
 		this.a = 0;
 		this.b = 0;
 		this.current = "";
-		this.disp = "";
 		this.strA = "";
-		this.strB = "";
 		this.result = 0;
+		this.disp = "";
 		this.sign = ' ';
+		this.percent = false;
 	}
 
 }
