@@ -33,7 +33,7 @@ th, td {
 	<form action="index.jsp" method="post">
 		<table style="width: 500px;">
 			<tr>
-				<td colspan="4"><input type="text" value="<%=calculator.display()%>"
+				<td colspan="4"><input type="text" value="<%=calculator.getDisplay()%>"
 					disabled="disabled"></td>
 				<td><button name="button" value="C" type="submit">C</button></td>
 			</tr>

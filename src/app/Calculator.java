@@ -5,26 +5,29 @@ public class Calculator {
 	private double a;
 	private double b;
 	private String current;
-	private String strA;
-	private double result;
 	private String disp;
 	private char sign;
 	private boolean percent;
-
+	
 	public Calculator() {
-		this.a = 0;
-		this.b = 0;
-		this.current = "";
-		this.strA = "";
-		this.result = 0;
-		this.disp = "";
-		this.sign = ' ';
-		this.percent = false;
-	};
-
+		reset();
+	}
+	
+	public void reset() {
+		a = 0;
+		b = 0;
+		current = "0";
+		disp = "0";
+		sign = ' ';
+		percent = false;
+	}
+	
 	public void click(String str) {
 		char c = str.charAt(0);
 		if (c >= 48 && c <= 57) {
+			if (current.charAt(0) == '0') {
+				current = "";
+			}
 			current += c;
 			disp = current;
 		} else if (c == '.') {
@@ -32,81 +35,70 @@ public class Calculator {
 				current += c;
 				disp = current;
 			}
-		} else if (c == '+' || c == '-' || c == '*' || c == '/' || c == 'n' || c == '%') {
-			if (current.length() == 0)
-				current = "0";
-			if (sign == ' ') {
-				a = Double.parseDouble(current);
-			} else if (c == '+' || c == '-' || c == '*' || c == '/') {
-				calculate();
-			}
-			sign = c;
-			if (c == 'n' || c == '%') {
-				switch (sign) {
-				case 'n':
-					a = a * (-1);
-					break;
-				case '%':
-					if (disp.contains("%")) {
-						a = a / 100;
-						percent = false;
-					} else {
-						a = a * 100;
-						percent = true;
-					}
-					break;
-				}
-			}
-			current = "";
-			disp = "" + a;
-		} else if (c == '=') {
-			if (current.length() == 0)
-				current = "0";
+		} else if (c == '+' || c == '-' || c == '*' || c == '/' || c == 'n') {
 			calculate();
-			double temp = a;
-			boolean percentTemp = percent;
+			sign = c;
+		} else if (c == '%') { // dodac elementy typu *30% +30% itp
+			percent = !percent;
+			calculate();
+			sign = c;
+		} else if (c == '=') {
+			calculate();
+			double tempA = a;
+			String tempDisp = disp;
 			reset();
-			a = temp;
-			if (percentTemp) {
-				a = a / 100;
-			}
-			current = "" + a;
-			disp = current;
+			a = tempA;
+			sign = c;
+			disp = tempDisp;
 		}
 	}
-
+	
 	private void calculate() {
+		b = Double.parseDouble(current);
 		switch (sign) {
+		case ' ':
+			a = b;
+			break;
 		case '+':
-			a = a + Double.parseDouble(current);
+			a = a + b;
 			break;
 		case '-':
-			a = a - Double.parseDouble(current);
+			a = a - b;
 			break;
 		case '*':
-			a = a + Double.parseDouble(current);
+			a = a * b;
 			break;
 		case '/':
-			a = a / Double.parseDouble(current);
+			a = a / b;
+			break;
+		case 'n':
+			a = a * (-1);
 			break;
 		}
+		toDisplay();
+		current = "0";
 	}
-
-	public String display() {
-		if (percent)
+	
+	private void toDisplay() {
+		if (a%1 == 0) {
+			int iA = (int) a;
+			if (percent) {
+				iA = iA * 100;
+			}
+			disp = "" + iA;
+		} else {
+			if (percent) {
+				a = a * 100;
+			}
+			disp = "" + a;
+		}
+		if (percent) {
 			disp += "%";
-		return this.disp;
+		}
 	}
-
-	public void reset() {
-		this.a = 0;
-		this.b = 0;
-		this.current = "";
-		this.strA = "";
-		this.result = 0;
-		this.disp = "";
-		this.sign = ' ';
-		this.percent = false;
+	
+	public String getDisplay() {
+		return this.disp;
 	}
 
 }
