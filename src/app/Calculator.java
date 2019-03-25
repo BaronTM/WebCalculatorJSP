@@ -26,7 +26,6 @@ public class Calculator {
 		char c = str.charAt(0);
 		if (c >= 48 && c <= 57) {
 			if ((current.startsWith("0") || current.startsWith("-0")) && !current.contains(".") && c == 48) {
-				current = current;
 			} else {
 				if ((current.startsWith("0") || current.startsWith("-0")) && !current.contains(".") && c > 48) {
 					current = "";
@@ -61,9 +60,13 @@ public class Calculator {
 			toDisplay();
 			current = "0";
 		} else if (c == '%') { // dodac elementy typu *30% +30% itp
-			percent = !percent;
-			calculate();
-			sign = c;
+			if (sign == '=') {
+				percent = !percent;
+				calculate();
+			} else {
+				current = "" + (a * Double.parseDouble(current) / 100);
+				disp = current;
+			}
 		} else if (c == '=') {
 			calculate();
 			double tempA = a;
@@ -100,7 +103,7 @@ public class Calculator {
 
 	private void toDisplay() {
 		if (a % 1 == 0) {
-			int iA = (int) a;
+			long iA = (long) a;
 			if (percent) {
 				iA = iA * 100;
 			}

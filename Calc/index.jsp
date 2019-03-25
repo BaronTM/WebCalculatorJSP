@@ -10,6 +10,10 @@ if (request.getParameter("button") == null) {
 } else {
 	calculator.click(request.getParameter("button"));
 }
+String result = calculator.getDisplay();
+if (result.equalsIgnoreCase("infinity") || result.equalsIgnoreCase("NAN")) {
+	result = "ERROR";
+}
 %>  
 	
 <!DOCTYPE html>
@@ -17,6 +21,7 @@ if (request.getParameter("button") == null) {
 <head>
 <meta charset="UTF-8">
 <title>Index jsp</title>
+<style><%@include file="styles.css"%></style>
 <style>
 table {
 	border: 1px solid black;
@@ -33,36 +38,36 @@ th, td {
 	<form action="index.jsp" method="post">
 		<table style="width: 500px;">
 			<tr>
-				<td colspan="4"><input type="text" value="<%=calculator.getDisplay()%>"
+				<td colspan="4"><input type="text" value="<%=result%>"
 					disabled="disabled"></td>
 				<td><button name="button" value="C" type="submit">C</button></td>
 			</tr>
 			<tr>
-				<td><button name="button" value="7" type="submit">7</button></td>
-				<td><button name="button" value="8" type="submit">8</button></td>
-				<td><button name="button" value="9" type="submit">9</button></td>
-				<td><button name="button" value="/" type="submit">/</button></td>
-				<td><button name="button" value="s" type="submit">sqrt</button></td>
+				<td><button name="button" class="myButton" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="7" type="submit">7</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="8" type="submit">8</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="9" type="submit">9</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="/" type="submit">/</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="s" type="submit">sqrt</button></td>
 			</tr>
 			<tr>
-				<td><button name="button" type="submit" value="4">4</button></td>
-				<td><button name="button" type="submit" value="5">5</button></td>
-				<td><button name="button" type="submit" value="6">6</button></td>
-				<td><button name="button" type="submit" value="*">*</button></td>
-				<td><button name="button" type="submit" value="%">%</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="4">4</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="5">5</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="6">6</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="*">*</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="%">%</button></td>
 			</tr>
 			<tr>
-				<td><button name="button" type="submit" value="1">1</button></td>
-				<td><button name="button" type="submit" value="2">2</button></td>
-				<td><button name="button" type="submit" value="3">3</button></td>
-				<td><button name="button" type="submit" value="-">-</button></td>
-				<td rowspan="2"><button type="submit" name="button" value="=">=</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="1">1</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="2">2</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="3">3</button></td>
+				<td><button name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" value="-">-</button></td>
+				<td rowspan="2"><button <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> type="submit" name="button" value="=">=</button></td>
 			</tr>
 			<tr>
-				<td><button type="submit" name="button" value="0">0</button></td>
-				<td><button type="submit" name="button" value=".">.</button></td>
-				<td><button type="submit" name="button" value="n">+/-</button></td>
-				<td><button type="submit" name="button" value="+">+</button></td>
+				<td><button type="submit" name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="0">0</button></td>
+				<td><button type="submit" name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value=".">.</button></td>
+				<td><button type="submit" name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="n">+/-</button></td>
+				<td><button type="submit" name="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="+">+</button></td>
 			</tr>
 		</table>
 	</form>
