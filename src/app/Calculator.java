@@ -33,10 +33,11 @@ public class Calculator {
 				disp = current;
 			}
 		} else if (c == '+' || c == '-' || c == '*' || c == '/' || c == 'n' || c == '%') {
-			if (current.length() == 0) current = "0";
+			if (current.length() == 0)
+				current = "0";
 			if (sign == ' ') {
 				a = Double.parseDouble(current);
-			} else {
+			} else if (c == '+' || c == '-' || c == '*' || c == '/') {
 				calculate();
 			}
 			sign = c;
@@ -46,15 +47,21 @@ public class Calculator {
 					a = a * (-1);
 					break;
 				case '%':
-					a = a * 100;
-					percent = true;
+					if (disp.contains("%")) {
+						a = a / 100;
+						percent = false;
+					} else {
+						a = a * 100;
+						percent = true;
+					}
 					break;
 				}
 			}
 			current = "";
 			disp = "" + a;
 		} else if (c == '=') {
-			if (current.length() == 0) current = "0";
+			if (current.length() == 0)
+				current = "0";
 			calculate();
 			double temp = a;
 			boolean percentTemp = percent;
@@ -63,7 +70,8 @@ public class Calculator {
 			if (percentTemp) {
 				a = a / 100;
 			}
-			disp = "" + a;
+			current = "" + a;
+			disp = current;
 		}
 	}
 
