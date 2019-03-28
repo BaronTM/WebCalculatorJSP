@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.text.NumberFormat" %>
 	
 <jsp:useBean class="app.Calculator" id="calculator" scope="session"/>
 
@@ -15,35 +16,46 @@ if (request.getParameter("button") == null) {
 String result = calculator.getDisplay();
 if (result.equalsIgnoreCase("infinity") || result.equalsIgnoreCase("NAN")) {
 	result = "ERROR";
+} else {
+	if (!result.contains(".") && result.length() > 13) {
+		result = "ERROR";
+	} else if (result.contains(".")) {
+		double resD = Double.parseDouble(result);
+		String num = String.format("%f", resD);
+		int dotIndex = num.indexOf(',');
+		if (dotIndex < num.length() - 1) {
+			NumberFormat nf = NumberFormat.getInstance();
+			nf.setGroupingUsed(false);
+			nf.setMaximumFractionDigits(12-dotIndex);
+			String[] strings = nf.format(resD).split(",");
+			if (strings[0].length() > 12) {
+				result = "ERROR";
+			} else {
+				result = strings[0] + "." + strings[1];
+			}
+		}
+	}
 }
 %>  
 	
 <!DOCTYPE html>
 <html>
 <head>
-<link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel="stylesheet" href="css/style.css">
- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
- <script  src="js/index.js"></script>
- 
 <meta charset="UTF-8">
 <title>Index jsp</title>
 <style><%@include file="css/styles.css"%></style>
 </head>
 <header>
-	<div class="text-effect">
-  <h1 class="neon" data-text="JSP CALCULATOR" contenteditable>JSP CALCULATOR</h1>
-  <div class="gradient"></div>
-  <div class="spotlight"></div>
-</div>
-</h1>
+<h1>JSP CALCULATOR</h1>
 </header>
 <body>
 	<form action="index.jsp" method="post">
+	<div>
 		<table class="tab">
-			<tr>
-				<td colspan="4" align="right"><h7 <%=result.equalsIgnoreCase("error")? "class=\"err\"" : "" %>><%=result%></h7></td>
+			<tr class="firstLine">
+				<td colspan="4" align="right" class="display">
+					<input type="text" name="firstname" disabled="disabled" <%=result.equalsIgnoreCase("error")? "class=\"err\"" : "" %> value="<%=result%>">				
+				</td>
 				<td><button name="button" class="button" value="C" type="submit">C</button></td>
 			</tr>
 			<tr>
@@ -74,7 +86,12 @@ if (result.equalsIgnoreCase("infinity") || result.equalsIgnoreCase("NAN")) {
 				<td><button type="submit" name="button" class="button" <%=result.equalsIgnoreCase("error")? "disabled=\"disabled\"" : "" %> value="+">+</button></td>
 			</tr>
 		</table>
+		</div>
 	</form>
-	<p><a>Made by Ernest Paprocki</a></p>
+	<br>
+	<br>
+	<br>
+	<br>
+	<h8 class="area">Made by Ernest Paprocki</h8>
 </body>
 </html>
