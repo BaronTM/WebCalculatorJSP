@@ -31,7 +31,10 @@ if (result.equalsIgnoreCase("infinity") || result.equalsIgnoreCase("NAN")) {
 			if (strings[0].length() > 12) {
 				result = "ERROR";
 			} else {
-				result = strings[0] + "." + strings[1];
+				result = strings[0] + ".";
+				if (strings.length > 1) {
+					result += strings[1];
+				}
 			}
 		}
 	}
